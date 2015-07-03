@@ -80,6 +80,38 @@ static const CGFloat LetterHeight = 11.0f;
     }
 }
 
+- (void)drawHeaderForPageAtIndex:(NSInteger)pageIndex
+                          inRect:(CGRect)headerRect {
+    
+    NSString *title = [NSString stringWithFormat:@"PARTICIPANT INFORMATION STATEMENT AND CONSENT FORM"];
+    NSString *studyName = [NSString stringWithFormat:@"Lorem Ipsum: A Study of Consent Documents and their uses."];
+    NSString *researcherName = [NSString stringWithFormat:@"Test Name"];
+    
+        UIFont *fontTitle = [UIFont fontWithName:@"Helvetica-Bold" size:12];
+        CGSize size = [title sizeWithAttributes:@{ NSFontAttributeName: font}];
+        
+        // Center Text
+        CGFloat drawX = CGRectGetWidth(headerRect)/2+headerRect.origin.x - size.width/2;
+        CGFloat drawY = headerRect.origin.y+bdLogo.size.height;
+        CGPoint drawPoint = CGPointMake(drawX, drawY);
+        [title drawAtPoint:drawPoint withAttributes:@{ NSFontAttributeName: fontTitle}];
+        
+        UIFont *fontText = [UIFont fontWithName:@"Helvetica" size:10];
+        CGSize sizeText = [studyName sizeWithAttributes:@{ NSFontAttributeName: fontText}];
+        
+        CGFloat drawXText = CGRectGetWidth(headerRect)/2+headerRect.origin.x - sizeText.width/2;
+        CGFloat drawYText = drawY + size.height;
+        CGPoint drawPointText = CGPointMake(drawXText, drawYText);
+        [studyName drawAtPoint:drawPointText withAttributes:@{ NSFontAttributeName: fontText}];
+        
+        CGSize sizeName = [researcherName sizeWithAttributes:@{ NSFontAttributeName: fontText}];
+        CGFloat drawXName = CGRectGetWidth(headerRect)/2+headerRect.origin.x - sizeName.width/2;
+        CGFloat drawYName = drawYText + sizeText.height;
+        CGPoint drawPointName = CGPointMake(drawXName, drawYName);
+        
+        [researcherName drawAtPoint:drawPointName withAttributes:@{ NSFontAttributeName: fontText}];
+    
+
 @end
 
 
