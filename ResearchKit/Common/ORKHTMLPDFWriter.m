@@ -48,6 +48,9 @@ static const CGFloat LetterHeight = 11.0f;
 
 @property (nonatomic) UIEdgeInsets pageMargins;
 
+@property (nonatomic, strong) NSString *headerTitle;
+@property (nonatomic, strong) NSString *headerText;
+
 @end
 
 
@@ -80,6 +83,30 @@ static const CGFloat LetterHeight = 11.0f;
     }
 }
 
+- (void)drawHeaderForPageAtIndex:(NSInteger)pageIndex
+                          inRect:(CGRect)headerRect {
+    
+    NSString *title = [NSString stringWithFormat:self.headerTitle];
+    NSString *studyName = [NSString stringWithFormat:self.headerText];
+    
+    UIFont *fontTitle = [UIFont fontWithName:@"Helvetica-Bold" size:12];
+    CGSize size = [title sizeWithAttributes:@{ NSFontAttributeName: font}];
+        
+    // Center Text
+    CGFloat drawX = CGRectGetWidth(headerRect)/2+headerRect.origin.x - size.width/2;
+    CGFloat drawY = headerRect.origin.y+bdLogo.size.height;
+    CGPoint drawPoint = CGPointMake(drawX, drawY);
+    [title drawAtPoint:drawPoint withAttributes:@{ NSFontAttributeName: fontTitle}];
+        
+    UIFont *fontText = [UIFont fontWithName:@"Helvetica" size:10];
+    CGSize sizeText = [studyName sizeWithAttributes:@{ NSFontAttributeName: fontText}];
+        
+    CGFloat drawXText = CGRectGetWidth(headerRect)/2+headerRect.origin.x - sizeText.width/2;
+    CGFloat drawYText = drawY + size.height;
+    CGPoint drawPointText = CGPointMake(drawXText, drawYText);
+    [studyName drawAtPoint:drawPointText withAttributes:@{ NSFontAttributeName: fontText}];
+}
+
 @end
 
 
@@ -94,6 +121,9 @@ static const CGFloat LetterHeight = 11.0f;
 @property (nonatomic, copy) NSError *error;
 @property (nonatomic, copy) void (^completionBlock)(NSData *data, NSError *error);
 
+@property (nonatomic, strong) NSString *headerTitle;
+@property (nonatomic, strong) NSString *headerText;
+
 @end
 
 
@@ -102,6 +132,14 @@ static const CGFloat LetterHeight = 11.0f;
 static const CGFloat kHeaderHeight = 25.0f;
 static const CGFloat kFooterHeight = 25.0f;
 static const CGFloat kPageEdge = 72.0f/4;
+
+- (void)setHeaderTitle:(NSString *)title {
+    self.headerTitle = title;
+}
+
+- (void)setHeaderText:(NSString *)text {
+    self.headerText = text;
+}
 
 - (void)writePDFFromHTML:(NSString *)html withCompletionBlock:(void (^)(NSData *data, NSError *error))completionBlock {
     
@@ -136,6 +174,8 @@ static const CGFloat kPageEdge = 72.0f/4;
     renderer.pageMargins = self.pageMargins;
     renderer.footerHeight = kFooterHeight;
     renderer.headerHeight = kHeaderHeight;
+    renderer.headerTitle = self.headerTitle;
+    renderer.headerText = self.headerText;
     
     [renderer addPrintFormatter:formatter startingAtPageAtIndex:0];
     
